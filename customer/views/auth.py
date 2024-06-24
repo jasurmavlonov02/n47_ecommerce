@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 from customer.forms import LoginForm
@@ -18,3 +18,10 @@ def login_page(request):
         form = LoginForm()
 
     return render(request, 'auth/login.html', {'form': form})
+
+
+def logout_page(request):
+    if request.method == 'GET   ':
+        logout(request)
+        return redirect('customers')
+    return render(request,'auth/logout.html')

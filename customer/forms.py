@@ -32,3 +32,12 @@ class LoginForm(forms.Form):
         return password
 
 
+# class RegisterModelForm(forms.ModelForm):
+#     confirm_password  = forms.CharField()
+#     class Meta:
+#         model = User
+#         fields = ('email', 'password')
+#
+#     def clean_confirm_password(self):
+#         pass
+#

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from customer.views.auth import login_page
+from customer.views.auth import login_page, logout_page
 from customer.views.customers import customers, add_customer, delete_customer, edit_customer
 
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     path('customer/<int:pk>/delete', delete_customer, name='delete'),
     path('customer/<int:pk>/update', edit_customer, name='edit'),
     # Authentication path
-    path('login-page/', login_page, name='login')
+    path('login-page/', login_page, name='login'),
+    path('logout-page/',logout_page,name='logout')
 ]
