@@ -1,6 +1,10 @@
+import csv
+import json
 from django.contrib import messages
+from django.db.models.functions import Cast
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.db.models import Q
+from django.db.models import Q, TextField
 from customer.forms import CustomerModelForm
 from customer.models import Customer
 
@@ -61,3 +65,6 @@ def edit_customer(request, pk):
         'form': form,
     }
     return render(request, 'customer/update-customer.html', context)
+
+
+
