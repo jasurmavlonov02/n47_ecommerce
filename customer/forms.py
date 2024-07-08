@@ -51,3 +51,13 @@ class RegisterModelForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError('Password didn\'t match')
         return password
+
+
+class UserModelForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        exclude = ()
+
+

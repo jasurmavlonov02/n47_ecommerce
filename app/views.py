@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
 from app.forms import ProductForm, ProductModelForm
@@ -8,9 +9,18 @@ from app.models import Product
 
 
 def index(request):
-    products = Product.objects.all().order_by('-id')[:4]
+    page = request.GET.get('page', '')
+    products = Product.objects.all().order_by('-id')
+    paginator = Paginator(products, 2)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
     context = {
-        'products': products
+        'page_obj': page_obj
     }
     return render(request, 'app/index.html', context)
 
