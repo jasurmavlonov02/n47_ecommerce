@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 
 from customer.forms import LoginForm, RegisterModelForm
+from django.contrib.auth.decorators import permission_required
 
 
 def login_page(request):
@@ -27,6 +28,8 @@ def logout_page(request):
     return render(request, 'auth/logout.html')
 
 
+permission = 'customer.add_customer'
+@permission_required(permission,'/login/',raise_exception=True)
 def register_page(request):
     if request.method == 'POST':
         form = RegisterModelForm(request.POST)

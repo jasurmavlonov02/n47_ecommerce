@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
+from import_export.admin import ImportExportModelAdmin
 
 from app.models import Product, Image, Attribute, AttributeValue, ProductAttribute
 from customer.models import User
@@ -18,10 +19,10 @@ admin.site.register(ProductAttribute)
 # admin.site.unregister(Group)
 # admin.site.register(User)
 
-class ProductModelAdmin(admin.ModelAdmin):
+class ProductModelAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'discount', 'price')
     search_fields = ('name',)
-    list_per_page = 2
+    list_per_page = 10
 
 
 admin.site.register(Product, ProductModelAdmin)

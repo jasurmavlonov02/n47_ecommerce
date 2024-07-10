@@ -318,6 +318,11 @@
 
                     </div>
                 </a>
+                    <div>
+                        {% if user.is_authenticated %}
+                            {{ user.pretty_split_by_email }}
+                        {% endif %}
+                    </div>
                     <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
                         <div class="bg-white dark__bg-1000 rounded-2 py-2">
 
@@ -375,11 +380,18 @@
                             <button class="btn btn-falcon-default btn-sm mx-2" type="button"><span
                                     class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span><span
                                     class="d-none d-sm-inline-block ms-1">Filter</span></button>
-
-                            <button class="btn btn-falcon-default btn-sm" type="submit"><span
-                                    class="fas fa-external-link-alt"
-                                    data-fa-transform="shrink-3 down-2"></span><span
-                                    class="d-none d-sm-inline-block ms-1">Export</span></button>
+                            <form action="{% url 'export_data' %}">
+                                <select id="format" name="format">
+                                    <option value="none" selected>...</option>
+                                    <option value="json">json</option>
+                                    <option value="xlsx">xlsx</option>
+                                    <option value="csv">csv</option>
+                                </select>
+                                <button class="btn btn-falcon-default btn-sm" type="submit"><span
+                                        class="fas fa-external-link-alt"
+                                        data-fa-transform="shrink-3 down-2"></span><span
+                                        class="d-none d-sm-inline-block ms-1">Export</span></button>
+                            </form>
                         </div>
                     </div>
                 </div>

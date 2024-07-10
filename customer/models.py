@@ -51,3 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.password = make_password(self.password)
 
         super().save(*args, **kwargs)
+
+    @property
+    def pretty_split_by_email(self):
+        return self.email.split('@')[0]
