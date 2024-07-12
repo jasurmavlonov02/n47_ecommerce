@@ -67,6 +67,7 @@ def edit_customer(request, pk):
 
 
 def export_data(request):
+    response = None
     format = request.GET.get('format', 'csv')
     if format == 'csv':
         response = HttpResponse(content_type='text/csv')
