@@ -1,4 +1,5 @@
 from django import forms
+from customer.authentication import AuthenticationForm
 
 from customer.models import Customer, User
 
@@ -9,7 +10,7 @@ class CustomerModelForm(forms.ModelForm):
         exclude = ()
 
 
-class LoginForm(forms.Form):
+class LoginForm(AuthenticationForm):
     email = forms.EmailField()
     password = forms.CharField(max_length=255)
 
@@ -28,7 +29,7 @@ class LoginForm(forms.Form):
             if not user.check_password(password):
                 raise forms.ValidationError('Password did not match')
         except User.DoesNotExist:
-            raise forms.ValidationError(f'{email} does not exists')
+            raise forms.ValidationError(f'User does not exists')
         return password
 
 
@@ -59,5 +60,3 @@ class UserModelForm(forms.ModelForm):
     class Meta:
         model = User
         exclude = ()
-
-
