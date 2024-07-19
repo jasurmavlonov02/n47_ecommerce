@@ -1,6 +1,6 @@
 from django import forms
+from customer.custom_field import MultiEmailField
 from customer.authentication import AuthenticationForm
-
 from customer.models import Customer, User
 
 
@@ -60,3 +60,23 @@ class UserModelForm(forms.ModelForm):
     class Meta:
         model = User
         exclude = ()
+
+
+class MyCustomField(forms.MultiValueField):
+
+    def __init__(self, *args, **kwargs):
+        fields = (
+            forms.CharField(max_length=31),
+            forms.CharField(max_length=31),
+            forms.CharField(max_length=31),
+        )
+        super(MyCustomField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        return "-".join(data_list)
+
+
+class ShareMail(forms.Form):
+    subject = forms.CharField(max_length=125)
+    body = forms.CharField(widget=forms.Textarea())
+    recipients = MultiEmailField()

@@ -1,12 +1,23 @@
+from django.contrib import messages
+from django.core.mail import EmailMessage
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic import FormView, CreateView
 
 from customer.forms import LoginForm, RegisterModelForm
 from django.contrib.auth.decorators import permission_required
+from config import settings
+from customer.models import User
+from customer.views.tokens import account_activation_token
 
 
 def login_page(request):
@@ -40,13 +51,32 @@ def register_page(request):
         form = RegisterModelForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            user.is_active = False
 
             user.set_password(password)
             user.save()
 
-            login(request, user)
-            return redirect('customers')
+            current_site = get_current_site(request)
+
+            subject = "Verify Email"
+            message = render_to_string('email/verify_email_message.html', {
+                'request': request,
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            email = EmailMessage(subject, message, to=[email])
+            email.content_subtype = 'html'
+
+            email.send()
+            # login(request, user)
+            return redirect('verify_email_done')
+
+        # send
+
     else:
         form = RegisterModelForm()
 
@@ -95,3 +125,27 @@ class RegisterFormView(FormView):
         user.save()
         login(self.request, user)
         return redirect('customers')
+
+
+def verify_email_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        print('-------------------------------')
+        print(user)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        messages.success(request, 'Your email has been verified.')
+        return redirect('customers')
+    else:
+        messages.warning(request, 'The link is invalid.')
+
+    return render(request, 'email/verify_email_confirm.html')
+
+
+def verify_email_done(request):
+    return render(request, 'email/verify_email_done.html')

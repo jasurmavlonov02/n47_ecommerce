@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, Permission
 
 from django.db import models
 
@@ -25,7 +25,6 @@ class Customer(models.Model):
         return self.email
 
     class Meta:
-        ordering = ('-joined',)
         verbose_name_plural = 'Customers'
         # verbose_name = 'Xaridor'
 

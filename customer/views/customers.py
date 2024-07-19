@@ -3,13 +3,15 @@ from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from customer.forms import CustomerModelForm
+from customer.forms import CustomerModelForm, ShareMail
 from customer.models import Customer
 import json
+from django.contrib.auth.decorators import permission_required, login_required
+from config import settings
+from django.contrib.auth.models import send_mail
 
 
 # Create your views here.
-
 
 def customers(request):
     search_query = request.GET.get('search')
@@ -51,6 +53,7 @@ def delete_customer(request, pk):
         return redirect('customers')
 
 
+@permission_required('customer.can_change_customer', raise_exception=True)
 def edit_customer(request, pk):
     customer = Customer.objects.get(id=pk)
     form = CustomerModelForm(instance=customer)
@@ -92,3 +95,21 @@ def export_data(request):
         response.content = 'Bad request'
 
     return response
+
+
+def share_mail(request):
+    sent = False
+    if request.method == 'POST':
+        form = ShareMail(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            body = form.cleaned_data['body']
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipients = form.cleaned_data['recipients']
+            send_mail(subject, body, from_email, recipients, fail_silently=False)
+            sent = True
+
+    else:
+        form = ShareMail()
+
+    return render(request, 'email/share_email.html', {'form': form, 'sent': sent})
