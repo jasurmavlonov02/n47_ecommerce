@@ -153,9 +153,13 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.twitter.TwitterOAuth'
 ]
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '64344816682-091c9i0ui4s0ns8u6s4qttkoqvhcammm.apps.googleusercontent.com'  # Google Client ID
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'  # Google Client Secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')  # Google Client ID
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')  # Google Client Secret
 
 LOGIN_REDIRECT_URL = '/customer/customer-list/'
+
+SOCIAL_AUTH_TWITTER_KEY = env('SOCIAL_AUTH_TWITTER_KEY')  # Twitter API Key
+SOCIAL_AUTH_TWITTER_SECRET = env('SOCIAL_AUTH_TWITTER_SECRET')  # Twitter API Secret
