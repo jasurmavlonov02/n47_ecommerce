@@ -26,6 +26,8 @@ def customers(request):
     return render(request, 'customer/customer-list.html', context)
 
 
+@login_required
+@permission_required('customer.view_customer', raise_exception=True)
 def add_customer(request):
     form = CustomerModelForm()
     if request.method == 'POST':

@@ -12,7 +12,7 @@ urlpatterns = [
     # Authentication path
     path('login-page/', LoginPage.as_view(), name='login'),
     path('logout-page/', logout_page, name='logout'),
-    path('register-page/', register_page, name='register'),
+    path('register-page/', RegisterFormView.as_view(), name='register'),
     path('export-data/', export_data, name='export_data'),
     path('sending-mail/', share_mail, name='share_mail'),
     # sending

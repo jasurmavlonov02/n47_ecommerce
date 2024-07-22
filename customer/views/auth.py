@@ -116,15 +116,30 @@ class LoginPage(LoginView):
 class RegisterFormView(FormView):
     template_name = 'auth/register.html'
     form_class = RegisterModelForm
-    success_url = reverse_lazy('customers')
+    # success_url = reverse_lazy('customers')
 
     def form_valid(self, form):
         user = form.save(commit=False)
         user.email = form.cleaned_data['email']
         user.password = form.cleaned_data['password']
+        user.is_active = False
         user.save()
-        login(self.request, user)
-        return redirect('customers')
+        current_site = get_current_site(self.request)
+
+        subject = "Verify Email"
+        message = render_to_string('email/verify_email_message.html', {
+            'request': self.request,
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
+        })
+        email = EmailMessage(subject, message, to=[user.email])
+        email.content_subtype = 'html'
+
+        email.send()
+        # login(self.request, user)
+        return redirect('verify_email_done')
 
 
 def verify_email_confirm(request, uidb64, token):

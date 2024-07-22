@@ -79,4 +79,4 @@ class MyCustomField(forms.MultiValueField):
 class ShareMail(forms.Form):
     subject = forms.CharField(max_length=125)
     body = forms.CharField(widget=forms.Textarea())
-    recipients = MultiEmailField()
+    recipients = MultiEmailField(widget=forms.Textarea())

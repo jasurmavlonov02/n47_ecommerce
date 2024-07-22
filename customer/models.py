@@ -26,7 +26,9 @@ class Customer(models.Model):
 
     class Meta:
         verbose_name_plural = 'Customers'
+
         # verbose_name = 'Xaridor'
+
 
 
 class User(AbstractBaseUser, PermissionsMixin):

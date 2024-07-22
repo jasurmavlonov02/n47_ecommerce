@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send email</title>
+</head>
+<body>
+{% if sent %}
+    <h2>Email successfully sent</h2>
+{% else %}
+    <form method="post">
+
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+{% endif %}
+</body>
+</html>

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'app',
     'customer.apps.CustomerConfig',
     'import_export',
+    'social_django'
 
 ]
 
@@ -149,3 +150,12 @@ EMAIL_HOST_PASSWORD = 'srth zwaz emjm aexl'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # jasurmavlonov24@gmail.com
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '64344816682-091c9i0ui4s0ns8u6s4qttkoqvhcammm.apps.googleusercontent.com'  # Google Client ID
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'  # Google Client Secret
+
+LOGIN_REDIRECT_URL = '/customer/customer-list/'
