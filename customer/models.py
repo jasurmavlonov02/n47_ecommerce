@@ -30,7 +30,6 @@ class Customer(models.Model):
         # verbose_name = 'Xaridor'
 
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=255, null=True, blank=True)
@@ -56,3 +55,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def pretty_split_by_email(self):
         return self.email.split('@')[0]
+
+

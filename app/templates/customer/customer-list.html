@@ -358,6 +358,14 @@
                                 {% endfor %}
                             </ul>
                         {% endif %}
+                        <script>
+                            setTimeout(function () {
+                                var messages = document.getElementById('messages');
+                                if (messages) {
+                                    messages.style.display = 'none';
+                                }
+                            }, 3000);  // 3000 milliseconds = 3 seconds
+                        </script>
                     </div>
                     <div class="col-8 col-sm-auto text-end ps-2">
                         <div class="d-none" id="table-customers-actions">

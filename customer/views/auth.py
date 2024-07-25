@@ -116,6 +116,7 @@ class LoginPage(LoginView):
 class RegisterFormView(FormView):
     template_name = 'auth/register.html'
     form_class = RegisterModelForm
+
     # success_url = reverse_lazy('customers')
 
     def form_valid(self, form):
@@ -124,6 +125,8 @@ class RegisterFormView(FormView):
         user.password = form.cleaned_data['password']
         user.is_active = False
         user.save()
+
+
         current_site = get_current_site(self.request)
 
         subject = "Verify Email"
@@ -153,7 +156,7 @@ def verify_email_confirm(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
+        login(request, user,backend='django.contrib.auth.backends.ModelBackend')
         messages.success(request, 'Your email has been verified.')
         return redirect('customers')
     else:
